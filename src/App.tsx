@@ -19,11 +19,13 @@ import {
 const useStyles = makeStyles({
   container: {
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: '100vh',
     backgroundColor: tokens.colorNeutralBackground3,
     padding: '20px',
+    gap: '16px',
   },
   card: {
     maxWidth: '540px',
@@ -32,9 +34,8 @@ const useStyles = makeStyles({
     boxShadow: tokens.shadow16,
   },
   optionSelector: {
-    marginBottom: '24px',
-    paddingBottom: '16px',
-    borderBottom: `2px solid ${tokens.colorNeutralStroke2}`,
+    maxWidth: '540px',
+    width: '100%',
   },
   header: {
     marginBottom: '16px',
@@ -237,18 +238,18 @@ function App() {
 
   return (
     <div className={styles.container}>
-      <Card className={styles.card}>
-        <div className={styles.optionSelector}>
-          <TabList
-            selectedValue={currentVariant}
-            onTabSelect={(_, data) => setCurrentVariant(data.value as VariantType)}
-          >
-            <Tab value="option1">Option 1: No Group Support</Tab>
-            <Tab value="option2">Option 2: With Group Support</Tab>
-            <Tab value="option3">Option 3: Group Support with Warnings</Tab>
-          </TabList>
-        </div>
+      <div className={styles.optionSelector}>
+        <TabList
+          selectedValue={currentVariant}
+          onTabSelect={(_, data) => setCurrentVariant(data.value as VariantType)}
+        >
+          <Tab value="option1">Option 1: No Group Support</Tab>
+          <Tab value="option2">Option 2: With Group Support</Tab>
+          <Tab value="option3">Option 3: Group Support with Warnings</Tab>
+        </TabList>
+      </div>
 
+      <Card className={styles.card}>
         <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
         <Text className={styles.description}>
