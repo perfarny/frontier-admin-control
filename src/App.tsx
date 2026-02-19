@@ -201,12 +201,14 @@ function App() {
     return false
   }, [selectedOption, selectedUsersGroups, initialSelectedOption, initialUsersGroups])
 
-  // Check if save is allowed (for option3 and option4, enforce 3 item limit)
+  // Check if save is allowed (for option3 and option4, enforce 3 item limit when specific-groups is selected)
   const canSave = useMemo(() => {
     if (!hasChanges) return false
-    if ((currentVariant === 'option3' || currentVariant === 'option4') && selectedUsersGroups.length > 3) return false
+    if ((currentVariant === 'option3' || currentVariant === 'option4') &&
+        selectedOption === 'specific-groups' &&
+        selectedUsersGroups.length > 3) return false
     return true
-  }, [hasChanges, currentVariant, selectedUsersGroups])
+  }, [hasChanges, currentVariant, selectedOption, selectedUsersGroups])
 
   const handleSave = () => {
     console.log('Saving configuration:', { variant: currentVariant, selectedOption, selectedUsersGroups })
