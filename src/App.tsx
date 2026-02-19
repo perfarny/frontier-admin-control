@@ -118,6 +118,7 @@ type VariantType = 'option1' | 'option2'
 interface OptionState {
   selectedOption: AccessOption
   selectedUsersGroups: string[]
+  initialSelectedOption: AccessOption
   initialUsersGroups: string[]
 }
 
@@ -132,6 +133,7 @@ function App() {
   const [option1State, setOption1State] = useState<OptionState>({
     selectedOption: initialOption,
     selectedUsersGroups: [],
+    initialSelectedOption: initialOption,
     initialUsersGroups: [],
   })
 
@@ -139,6 +141,7 @@ function App() {
   const [option2State, setOption2State] = useState<OptionState>({
     selectedOption: initialOption,
     selectedUsersGroups: [],
+    initialSelectedOption: initialOption,
     initialUsersGroups: [],
   })
 
@@ -148,28 +151,35 @@ function App() {
 
   const selectedOption = currentState.selectedOption
   const selectedUsersGroups = currentState.selectedUsersGroups
+  const initialSelectedOption = currentState.initialSelectedOption
   const initialUsersGroups = currentState.initialUsersGroups
 
   // Check if changes have been made
   const hasChanges = useMemo(() => {
-    if (selectedOption !== initialOption) return true
+    if (selectedOption !== initialSelectedOption) return true
     if (selectedOption === 'specific-groups' as AccessOption) {
       return JSON.stringify([...selectedUsersGroups].sort()) !== JSON.stringify([...initialUsersGroups].sort())
     }
     return false
-  }, [selectedOption, selectedUsersGroups, initialUsersGroups])
+  }, [selectedOption, selectedUsersGroups, initialSelectedOption, initialUsersGroups])
 
   const handleSave = () => {
     console.log('Saving configuration:', { variant: currentVariant, selectedOption, selectedUsersGroups })
-    alert(`Configuration saved!\nVariant: ${currentVariant}\nOption: ${selectedOption}\nSelected: ${selectedUsersGroups.join(', ')}`)
+    // Update the initial state to match current state, which disables the Save button
+    setCurrentState({
+      ...currentState,
+      initialSelectedOption: selectedOption,
+      initialUsersGroups: [...selectedUsersGroups],
+    })
   }
 
   const handleCancel = () => {
     console.log('Cancelled')
+    // Reset to the last saved state
     setCurrentState({
       ...currentState,
-      selectedOption: initialOption,
-      selectedUsersGroups: [],
+      selectedOption: initialSelectedOption,
+      selectedUsersGroups: [...initialUsersGroups],
     })
   }
 
