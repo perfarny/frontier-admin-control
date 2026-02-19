@@ -36,6 +36,8 @@ const useStyles = makeStyles({
   optionSelector: {
     maxWidth: '540px',
     width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
   },
   header: {
     marginBottom: '16px',
