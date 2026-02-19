@@ -115,6 +115,12 @@ const mockUsersAndGroups: UserOrGroup[] = [
 
 type VariantType = 'option1' | 'option2'
 
+interface OptionState {
+  selectedOption: AccessOption
+  selectedUsersGroups: string[]
+  initialUsersGroups: string[]
+}
+
 function App() {
   const styles = useStyles()
   const initialOption: AccessOption = 'no-access'
@@ -123,17 +129,17 @@ function App() {
   const [currentVariant, setCurrentVariant] = useState<VariantType>('option2')
 
   // Separate state for Option 1 (No Group Support)
-  const [option1State, setOption1State] = useState({
+  const [option1State, setOption1State] = useState<OptionState>({
     selectedOption: initialOption,
-    selectedUsersGroups: [] as string[],
-    initialUsersGroups: [] as string[],
+    selectedUsersGroups: [],
+    initialUsersGroups: [],
   })
 
   // Separate state for Option 2 (With Group Support)
-  const [option2State, setOption2State] = useState({
+  const [option2State, setOption2State] = useState<OptionState>({
     selectedOption: initialOption,
-    selectedUsersGroups: [] as string[],
-    initialUsersGroups: [] as string[],
+    selectedUsersGroups: [],
+    initialUsersGroups: [],
   })
 
   // Get current state based on selected variant
@@ -256,7 +262,7 @@ function App() {
                 ? 'Only specified users will automatically receive Frontier features and agents.'
                 : 'Only specified groups and users will automatically receive Frontier features and agents.'}
             </Text>
-            {selectedOption === 'specific-groups' && (
+            {selectedOption === 'specific-groups' as AccessOption && (
               <div className={styles.userGroupSelector}>
                 <Combobox
                   placeholder="Search for users or groups"
