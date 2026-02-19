@@ -451,7 +451,11 @@ function App() {
                         : tokens.colorNeutralForeground2
                     }}
                   >
-                    (Maximum: 3 users)
+                    (Maximum: 3 users
+                    {((currentVariant === 'option3' && option3ValidationError) ||
+                      (currentVariant === 'option4' && (option4ValidationError || (initialUsersGroups.length > 3 && !option4WarningDismissed)))) &&
+                      ' - Limit Exceeded'}
+                    )
                   </Text>
                 )}
               </div>
