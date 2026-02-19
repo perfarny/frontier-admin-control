@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import {
   Card,
   Text,
@@ -175,6 +175,9 @@ function App() {
     initialUsersGroups: ['4', '5', '6', '7', '8'],
   })
 
+  // Track if the warning banner has been dismissed for Option 4
+  const [option4WarningDismissed, setOption4WarningDismissed] = useState(false)
+
   // Get current state based on selected variant
   const currentState =
     currentVariant === 'option1' ? option1State :
@@ -191,6 +194,16 @@ function App() {
   const selectedUsersGroups = currentState.selectedUsersGroups
   const initialSelectedOption = currentState.initialSelectedOption
   const initialUsersGroups = currentState.initialUsersGroups
+
+  // Dismiss the Option 4 warning when user reduces below the limit
+  useEffect(() => {
+    if (currentVariant === 'option4' &&
+        initialUsersGroups.length > 3 &&
+        selectedUsersGroups.length <= 3 &&
+        !option4WarningDismissed) {
+      setOption4WarningDismissed(true)
+    }
+  }, [currentVariant, selectedUsersGroups, initialUsersGroups, option4WarningDismissed])
 
   // Check if changes have been made
   const hasChanges = useMemo(() => {
@@ -274,7 +287,7 @@ function App() {
       <Card className={styles.card}>
         <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
-        {currentVariant === 'option4' && selectedUsersGroups.length > 3 && (
+        {currentVariant === 'option4' && initialUsersGroups.length > 3 && !option4WarningDismissed && (
           <MessageBar
             intent="warning"
             className={styles.warningBanner}
