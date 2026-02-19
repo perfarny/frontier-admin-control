@@ -232,8 +232,13 @@ function App() {
         </Text>
 
         <Text className={styles.description}>
-          <a href="#" style={{ color: tokens.colorBrandForeground1, textDecoration: 'none' }}>
-            Learn more about Copilot Frontier
+          <a
+            href="https://adoption.microsoft.com/en-us/copilot/frontier-program/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: tokens.colorBrandForeground1, textDecoration: 'none' }}
+          >
+            Learn more about Frontier
           </a>
         </Text>
 
