@@ -184,10 +184,10 @@ function App() {
     return false
   }, [selectedOption, selectedUsersGroups, initialSelectedOption, initialUsersGroups])
 
-  // Check if save is allowed (for option3, enforce 10 item limit)
+  // Check if save is allowed (for option3, enforce 3 item limit)
   const canSave = useMemo(() => {
     if (!hasChanges) return false
-    if (currentVariant === 'option3' && selectedUsersGroups.length > 10) return false
+    if (currentVariant === 'option3' && selectedUsersGroups.length > 3) return false
     return true
   }, [hasChanges, currentVariant, selectedUsersGroups])
 
@@ -346,10 +346,10 @@ function App() {
                   <Text
                     className={styles.counterText}
                     style={{
-                      color: selectedUsersGroups.length > 10 ? tokens.colorPaletteRedForeground1 : tokens.colorNeutralForeground2
+                      color: selectedUsersGroups.length > 3 ? tokens.colorPaletteRedForeground1 : tokens.colorNeutralForeground2
                     }}
                   >
-                    ({selectedUsersGroups.length} of 10 users selected)
+                    ({selectedUsersGroups.length} of 3 users selected)
                   </Text>
                 )}
               </div>
