@@ -446,7 +446,7 @@ function App() {
                     className={styles.counterText}
                     style={{
                       color: (currentVariant === 'option3' && option3ValidationError) ||
-                             (currentVariant === 'option4' && option4ValidationError)
+                             (currentVariant === 'option4' && (option4ValidationError || (initialUsersGroups.length > 3 && !option4WarningDismissed)))
                         ? tokens.colorPaletteRedForeground1
                         : tokens.colorNeutralForeground2
                     }}
