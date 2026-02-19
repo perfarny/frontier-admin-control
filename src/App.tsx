@@ -178,6 +178,14 @@ function App() {
   // Track if the warning banner has been dismissed for Option 4
   const [option4WarningDismissed, setOption4WarningDismissed] = useState(false)
 
+  // Track validation errors after Save attempt for Options 3 and 4
+  const [option3ValidationError, setOption3ValidationError] = useState(false)
+  const [option4ValidationError, setOption4ValidationError] = useState(false)
+
+  // Track last validated count (updated only on Save) for counter display
+  const [option3LastValidatedCount, setOption3LastValidatedCount] = useState(0)
+  const [option4LastValidatedCount, setOption4LastValidatedCount] = useState(5) // Starts with 5 for option 4
+
   // Get current state based on selected variant
   const currentState =
     currentVariant === 'option1' ? option1State :
@@ -214,23 +222,60 @@ function App() {
     return false
   }, [selectedOption, selectedUsersGroups, initialSelectedOption, initialUsersGroups])
 
-  // Check if save is allowed (for option3 and option4, enforce 3 item limit when specific-groups is selected)
+  // Clear validation errors when user fixes the issue
+  useEffect(() => {
+    if (currentVariant === 'option3' && option3ValidationError) {
+      if (selectedOption !== 'specific-groups' || selectedUsersGroups.length <= 3) {
+        setOption3ValidationError(false)
+      }
+    }
+    if (currentVariant === 'option4' && option4ValidationError) {
+      if (selectedOption !== 'specific-groups' || selectedUsersGroups.length <= 3) {
+        setOption4ValidationError(false)
+      }
+    }
+  }, [currentVariant, selectedOption, selectedUsersGroups, option3ValidationError, option4ValidationError])
+
+  // Check if save is allowed
   const canSave = useMemo(() => {
     if (!hasChanges) return false
-    if ((currentVariant === 'option3' || currentVariant === 'option4') &&
-        selectedOption === 'specific-groups' &&
-        selectedUsersGroups.length > 3) return false
+    // Prevent save if validation error is showing
+    if (currentVariant === 'option3' && option3ValidationError) return false
+    if (currentVariant === 'option4' && option4ValidationError) return false
     return true
-  }, [hasChanges, currentVariant, selectedOption, selectedUsersGroups])
+  }, [hasChanges, currentVariant, option3ValidationError, option4ValidationError])
 
   const handleSave = () => {
     console.log('Saving configuration:', { variant: currentVariant, selectedOption, selectedUsersGroups })
-    // Update the initial state to match current state, which disables the Save button
+
+    // For Options 3 and 4, validate user count on Save
+    if ((currentVariant === 'option3' || currentVariant === 'option4') &&
+        selectedOption === 'specific-groups' &&
+        selectedUsersGroups.length > 3) {
+      // Show validation error
+      if (currentVariant === 'option3') {
+        setOption3ValidationError(true)
+        setOption3LastValidatedCount(selectedUsersGroups.length)
+      } else {
+        setOption4ValidationError(true)
+        setOption4LastValidatedCount(selectedUsersGroups.length)
+      }
+      return // Don't save
+    }
+
+    // Update the initial state to match current state (successful save)
     setCurrentState({
       ...currentState,
       initialSelectedOption: selectedOption,
       initialUsersGroups: [...selectedUsersGroups],
     })
+
+    // Update validated counts on successful save
+    if (currentVariant === 'option3') {
+      setOption3LastValidatedCount(selectedUsersGroups.length)
+    } else if (currentVariant === 'option4') {
+      setOption4LastValidatedCount(selectedUsersGroups.length)
+    }
   }
 
   const handleCancel = () => {
@@ -287,7 +332,21 @@ function App() {
       <Card className={styles.card}>
         <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
-        {currentVariant === 'option4' && initialUsersGroups.length > 3 && !option4WarningDismissed && (
+        {/* Show pre-existing warning for Option 4 on initial load */}
+        {currentVariant === 'option4' && initialUsersGroups.length > 3 && !option4WarningDismissed && !option4ValidationError && (
+          <MessageBar
+            intent="warning"
+            className={styles.warningBanner}
+          >
+            <MessageBarBody>
+              You have exceeded the number of allowed users. <Link>Learn more</Link>
+            </MessageBarBody>
+          </MessageBar>
+        )}
+
+        {/* Show validation error after Save attempt for Options 3 and 4 */}
+        {((currentVariant === 'option3' && option3ValidationError) ||
+          (currentVariant === 'option4' && option4ValidationError)) && (
           <MessageBar
             intent="warning"
             className={styles.warningBanner}
@@ -390,14 +449,24 @@ function App() {
                     ))}
                   </TagGroup>
                 )}
-                {(currentVariant === 'option3' || currentVariant === 'option4') && (
+                {currentVariant === 'option3' && (
                   <Text
                     className={styles.counterText}
                     style={{
-                      color: selectedUsersGroups.length > 3 ? tokens.colorPaletteRedForeground1 : tokens.colorNeutralForeground2
+                      color: option3LastValidatedCount > 3 ? tokens.colorPaletteRedForeground1 : tokens.colorNeutralForeground2
                     }}
                   >
-                    ({selectedUsersGroups.length} of 3 users selected)
+                    ({option3LastValidatedCount} of 3 users selected)
+                  </Text>
+                )}
+                {currentVariant === 'option4' && (
+                  <Text
+                    className={styles.counterText}
+                    style={{
+                      color: option4LastValidatedCount > 3 ? tokens.colorPaletteRedForeground1 : tokens.colorNeutralForeground2
+                    }}
+                  >
+                    ({option4LastValidatedCount} of 3 users selected)
                   </Text>
                 )}
               </div>
