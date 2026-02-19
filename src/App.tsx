@@ -182,10 +182,6 @@ function App() {
   const [option3ValidationError, setOption3ValidationError] = useState(false)
   const [option4ValidationError, setOption4ValidationError] = useState(false)
 
-  // Track last validated count (updated only on Save) for counter display
-  const [option3LastValidatedCount, setOption3LastValidatedCount] = useState(0)
-  const [option4LastValidatedCount, setOption4LastValidatedCount] = useState(5) // Starts with 5 for option 4
-
   // Get current state based on selected variant
   const currentState =
     currentVariant === 'option1' ? option1State :
@@ -255,10 +251,8 @@ function App() {
       // Show validation error
       if (currentVariant === 'option3') {
         setOption3ValidationError(true)
-        setOption3LastValidatedCount(selectedUsersGroups.length)
       } else {
         setOption4ValidationError(true)
-        setOption4LastValidatedCount(selectedUsersGroups.length)
       }
       return // Don't save
     }
@@ -269,13 +263,6 @@ function App() {
       initialSelectedOption: selectedOption,
       initialUsersGroups: [...selectedUsersGroups],
     })
-
-    // Update validated counts on successful save
-    if (currentVariant === 'option3') {
-      setOption3LastValidatedCount(selectedUsersGroups.length)
-    } else if (currentVariant === 'option4') {
-      setOption4LastValidatedCount(selectedUsersGroups.length)
-    }
   }
 
   const handleCancel = () => {
@@ -454,24 +441,17 @@ function App() {
                     ))}
                   </TagGroup>
                 )}
-                {currentVariant === 'option3' && (
+                {(currentVariant === 'option3' || currentVariant === 'option4') && (
                   <Text
                     className={styles.counterText}
                     style={{
-                      color: option3LastValidatedCount > 3 ? tokens.colorPaletteRedForeground1 : tokens.colorNeutralForeground2
+                      color: (currentVariant === 'option3' && option3ValidationError) ||
+                             (currentVariant === 'option4' && option4ValidationError)
+                        ? tokens.colorPaletteRedForeground1
+                        : tokens.colorNeutralForeground2
                     }}
                   >
-                    ({option3LastValidatedCount} of 3 users selected)
-                  </Text>
-                )}
-                {currentVariant === 'option4' && (
-                  <Text
-                    className={styles.counterText}
-                    style={{
-                      color: option4LastValidatedCount > 3 ? tokens.colorPaletteRedForeground1 : tokens.colorNeutralForeground2
-                    }}
-                  >
-                    ({option4LastValidatedCount} of 3 users selected)
+                    (Maximum: 3 users)
                   </Text>
                 )}
               </div>
