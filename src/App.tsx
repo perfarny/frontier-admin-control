@@ -18,7 +18,6 @@ import {
   MessageBarBody,
   Link,
 } from '@fluentui/react-components'
-import { Warning20Regular } from '@fluentui/react-icons'
 
 const useStyles = makeStyles({
   container: {
