@@ -81,6 +81,10 @@ const useStyles = makeStyles({
     gap: '8px',
     marginTop: '8px',
   },
+  counterText: {
+    fontSize: '12px',
+    marginTop: '8px',
+  },
   footer: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -113,7 +117,7 @@ const mockUsersAndGroups: UserOrGroup[] = [
   { id: '9', name: 'IT Admins', type: 'group' },
 ]
 
-type VariantType = 'option1' | 'option2'
+type VariantType = 'option1' | 'option2' | 'option3'
 
 interface OptionState {
   selectedOption: AccessOption
@@ -145,9 +149,23 @@ function App() {
     initialUsersGroups: [],
   })
 
+  // Separate state for Option 3 (Group Support with Warnings)
+  const [option3State, setOption3State] = useState<OptionState>({
+    selectedOption: initialOption,
+    selectedUsersGroups: [],
+    initialSelectedOption: initialOption,
+    initialUsersGroups: [],
+  })
+
   // Get current state based on selected variant
-  const currentState = currentVariant === 'option1' ? option1State : option2State
-  const setCurrentState = currentVariant === 'option1' ? setOption1State : setOption2State
+  const currentState =
+    currentVariant === 'option1' ? option1State :
+    currentVariant === 'option2' ? option2State :
+    option3State
+  const setCurrentState =
+    currentVariant === 'option1' ? setOption1State :
+    currentVariant === 'option2' ? setOption2State :
+    setOption3State
 
   const selectedOption = currentState.selectedOption
   const selectedUsersGroups = currentState.selectedUsersGroups
@@ -162,6 +180,13 @@ function App() {
     }
     return false
   }, [selectedOption, selectedUsersGroups, initialSelectedOption, initialUsersGroups])
+
+  // Check if save is allowed (for option3, enforce 10 item limit)
+  const canSave = useMemo(() => {
+    if (!hasChanges) return false
+    if (currentVariant === 'option3' && selectedUsersGroups.length > 10) return false
+    return true
+  }, [hasChanges, currentVariant, selectedUsersGroups])
 
   const handleSave = () => {
     console.log('Saving configuration:', { variant: currentVariant, selectedOption, selectedUsersGroups })
@@ -220,6 +245,7 @@ function App() {
           >
             <Tab value="option1">Option 1: No Group Support</Tab>
             <Tab value="option2">Option 2: With Group Support</Tab>
+            <Tab value="option3">Option 3: Group Support with Warnings</Tab>
           </TabList>
         </div>
 
@@ -313,6 +339,16 @@ function App() {
                     ))}
                   </TagGroup>
                 )}
+                {currentVariant === 'option3' && (
+                  <Text
+                    className={styles.counterText}
+                    style={{
+                      color: selectedUsersGroups.length > 10 ? tokens.colorPaletteRedForeground1 : tokens.colorNeutralForeground2
+                    }}
+                  >
+                    ({selectedUsersGroups.length} of 10 users selected)
+                  </Text>
+                )}
               </div>
             )}
           </div>
@@ -322,7 +358,7 @@ function App() {
           <Button appearance="secondary" onClick={handleCancel} disabled={!hasChanges}>
             Cancel
           </Button>
-          <Button appearance="primary" onClick={handleSave} disabled={!hasChanges}>
+          <Button appearance="primary" onClick={handleSave} disabled={!canSave}>
             Save
           </Button>
         </div>
