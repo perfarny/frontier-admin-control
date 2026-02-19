@@ -13,7 +13,6 @@ import {
   Tag,
   TagGroup,
 } from '@fluentui/react-components'
-import { Dismiss12Regular } from '@fluentui/react-icons'
 
 const useStyles = makeStyles({
   container: {
@@ -117,7 +116,7 @@ function App() {
   // Check if changes have been made
   const hasChanges = useMemo(() => {
     if (selectedOption !== initialOption) return true
-    if (selectedOption === 'specific-groups') {
+    if (selectedOption === 'specific-groups' as AccessOption) {
       return JSON.stringify(selectedUsersGroups.sort()) !== JSON.stringify(initialUsersGroups.sort())
     }
     return false
@@ -208,11 +207,14 @@ function App() {
                 >
                   {mockUsersAndGroups
                     .filter((item) => !selectedUsersGroups.includes(item.id))
-                    .map((item) => (
-                      <Option key={item.id} value={item.id}>
-                        {item.name} {item.type === 'group' ? '(Group)' : item.email ? `(${item.email})` : ''}
-                      </Option>
-                    ))}
+                    .map((item) => {
+                      const displayText = `${item.name} ${item.type === 'group' ? '(Group)' : item.email ? `(${item.email})` : ''}`
+                      return (
+                        <Option key={item.id} value={item.id} text={displayText}>
+                          {displayText}
+                        </Option>
+                      )
+                    })}
                 </Combobox>
                 {selectedUsersGroups.length > 0 && (
                   <TagGroup className={styles.selectedItems}>
