@@ -314,7 +314,7 @@ function App() {
         </RadioGroup>
 
         <div className={styles.footer}>
-          <Button appearance="secondary" onClick={handleCancel}>
+          <Button appearance="secondary" onClick={handleCancel} disabled={!hasChanges}>
             Cancel
           </Button>
           <Button appearance="primary" onClick={handleSave} disabled={!hasChanges}>
