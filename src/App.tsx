@@ -271,19 +271,18 @@ function App() {
       </div>
 
       <Card className={styles.card}>
+        <Title3 className={styles.header}>Turn on Frontier features</Title3>
+
         {currentVariant === 'option4' && selectedUsersGroups.length > 3 && (
           <MessageBar
             intent="warning"
             className={styles.warningBanner}
-            icon={<Warning20Regular />}
           >
             <MessageBarBody>
               You have exceeded the number of allowed users. <Link>Learn more</Link>
             </MessageBarBody>
           </MessageBar>
         )}
-
-        <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
         <Text className={styles.description}>
           The Frontier program gives your organization early, hands-on access to experimental features from
