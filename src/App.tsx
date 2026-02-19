@@ -14,7 +14,11 @@ import {
   TagGroup,
   TabList,
   Tab,
+  MessageBar,
+  MessageBarBody,
+  Link,
 } from '@fluentui/react-components'
+import { Warning20Regular } from '@fluentui/react-icons'
 
 const useStyles = makeStyles({
   container: {
@@ -38,6 +42,9 @@ const useStyles = makeStyles({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
+  },
+  warningBanner: {
+    marginBottom: '16px',
   },
   header: {
     marginBottom: '16px',
@@ -120,7 +127,7 @@ const mockUsersAndGroups: UserOrGroup[] = [
   { id: '9', name: 'IT Admins', type: 'group' },
 ]
 
-type VariantType = 'option1' | 'option2' | 'option3'
+type VariantType = 'option1' | 'option2' | 'option3' | 'option4'
 
 interface OptionState {
   selectedOption: AccessOption
@@ -160,15 +167,26 @@ function App() {
     initialUsersGroups: [],
   })
 
+  // Separate state for Option 4 (Pre-exceeded Limit with Warning Banner)
+  // Pre-populate with 5 users to exceed the 3-user limit
+  const [option4State, setOption4State] = useState<OptionState>({
+    selectedOption: 'specific-groups',
+    selectedUsersGroups: ['4', '5', '6', '7', '8'], // 5 users pre-selected
+    initialSelectedOption: 'specific-groups',
+    initialUsersGroups: ['4', '5', '6', '7', '8'],
+  })
+
   // Get current state based on selected variant
   const currentState =
     currentVariant === 'option1' ? option1State :
     currentVariant === 'option2' ? option2State :
-    option3State
+    currentVariant === 'option3' ? option3State :
+    option4State
   const setCurrentState =
     currentVariant === 'option1' ? setOption1State :
     currentVariant === 'option2' ? setOption2State :
-    setOption3State
+    currentVariant === 'option3' ? setOption3State :
+    setOption4State
 
   const selectedOption = currentState.selectedOption
   const selectedUsersGroups = currentState.selectedUsersGroups
@@ -184,10 +202,10 @@ function App() {
     return false
   }, [selectedOption, selectedUsersGroups, initialSelectedOption, initialUsersGroups])
 
-  // Check if save is allowed (for option3, enforce 3 item limit)
+  // Check if save is allowed (for option3 and option4, enforce 3 item limit)
   const canSave = useMemo(() => {
     if (!hasChanges) return false
-    if (currentVariant === 'option3' && selectedUsersGroups.length > 3) return false
+    if ((currentVariant === 'option3' || currentVariant === 'option4') && selectedUsersGroups.length > 3) return false
     return true
   }, [hasChanges, currentVariant, selectedUsersGroups])
 
@@ -248,10 +266,23 @@ function App() {
           <Tab value="option1">Option 1: No Group Support</Tab>
           <Tab value="option2">Option 2: With Group Support</Tab>
           <Tab value="option3">Option 3: Group Support with Warnings</Tab>
+          <Tab value="option4">Option 4: Pre-exceeded Limit</Tab>
         </TabList>
       </div>
 
       <Card className={styles.card}>
+        {currentVariant === 'option4' && selectedUsersGroups.length > 3 && (
+          <MessageBar
+            intent="warning"
+            className={styles.warningBanner}
+            icon={<Warning20Regular />}
+          >
+            <MessageBarBody>
+              You have exceeded the number of allowed users. <Link>Learn more</Link>
+            </MessageBarBody>
+          </MessageBar>
+        )}
+
         <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
         <Text className={styles.description}>
@@ -346,7 +377,7 @@ function App() {
                     ))}
                   </TagGroup>
                 )}
-                {currentVariant === 'option3' && (
+                {(currentVariant === 'option3' || currentVariant === 'option4') && (
                   <Text
                     className={styles.counterText}
                     style={{
