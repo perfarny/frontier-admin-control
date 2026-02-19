@@ -12,6 +12,8 @@ import {
   Option,
   Tag,
   TagGroup,
+  TabList,
+  Tab,
 } from '@fluentui/react-components'
 
 const useStyles = makeStyles({
@@ -28,6 +30,11 @@ const useStyles = makeStyles({
     width: '100%',
     padding: '32px',
     boxShadow: tokens.shadow16,
+  },
+  optionSelector: {
+    marginBottom: '24px',
+    paddingBottom: '16px',
+    borderBottom: `2px solid ${tokens.colorNeutralStroke2}`,
   },
   header: {
     marginBottom: '16px',
@@ -106,41 +113,81 @@ const mockUsersAndGroups: UserOrGroup[] = [
   { id: '9', name: 'IT Admins', type: 'group' },
 ]
 
+type VariantType = 'option1' | 'option2'
+
 function App() {
   const styles = useStyles()
   const initialOption: AccessOption = 'no-access'
-  const [selectedOption, setSelectedOption] = useState<AccessOption>(initialOption)
-  const [selectedUsersGroups, setSelectedUsersGroups] = useState<string[]>([])
-  const [initialUsersGroups] = useState<string[]>([])
+
+  // State for which variant/option is being viewed
+  const [currentVariant, setCurrentVariant] = useState<VariantType>('option2')
+
+  // Separate state for Option 1 (No Group Support)
+  const [option1State, setOption1State] = useState({
+    selectedOption: initialOption,
+    selectedUsersGroups: [] as string[],
+    initialUsersGroups: [] as string[],
+  })
+
+  // Separate state for Option 2 (With Group Support)
+  const [option2State, setOption2State] = useState({
+    selectedOption: initialOption,
+    selectedUsersGroups: [] as string[],
+    initialUsersGroups: [] as string[],
+  })
+
+  // Get current state based on selected variant
+  const currentState = currentVariant === 'option1' ? option1State : option2State
+  const setCurrentState = currentVariant === 'option1' ? setOption1State : setOption2State
+
+  const selectedOption = currentState.selectedOption
+  const selectedUsersGroups = currentState.selectedUsersGroups
+  const initialUsersGroups = currentState.initialUsersGroups
 
   // Check if changes have been made
   const hasChanges = useMemo(() => {
     if (selectedOption !== initialOption) return true
     if (selectedOption === 'specific-groups' as AccessOption) {
-      return JSON.stringify(selectedUsersGroups.sort()) !== JSON.stringify(initialUsersGroups.sort())
+      return JSON.stringify([...selectedUsersGroups].sort()) !== JSON.stringify([...initialUsersGroups].sort())
     }
     return false
   }, [selectedOption, selectedUsersGroups, initialUsersGroups])
 
   const handleSave = () => {
-    console.log('Saving configuration:', { selectedOption, selectedUsersGroups })
-    alert(`Configuration saved!\nOption: ${selectedOption}\nSelected: ${selectedUsersGroups.join(', ')}`)
+    console.log('Saving configuration:', { variant: currentVariant, selectedOption, selectedUsersGroups })
+    alert(`Configuration saved!\nVariant: ${currentVariant}\nOption: ${selectedOption}\nSelected: ${selectedUsersGroups.join(', ')}`)
   }
 
   const handleCancel = () => {
     console.log('Cancelled')
-    setSelectedOption(initialOption)
-    setSelectedUsersGroups([])
+    setCurrentState({
+      ...currentState,
+      selectedOption: initialOption,
+      selectedUsersGroups: [],
+    })
   }
 
   const handleSelectUserGroup = (id: string) => {
     if (!selectedUsersGroups.includes(id)) {
-      setSelectedUsersGroups([...selectedUsersGroups, id])
+      setCurrentState({
+        ...currentState,
+        selectedUsersGroups: [...selectedUsersGroups, id],
+      })
     }
   }
 
   const handleRemoveUserGroup = (id: string) => {
-    setSelectedUsersGroups(selectedUsersGroups.filter((item) => item !== id))
+    setCurrentState({
+      ...currentState,
+      selectedUsersGroups: selectedUsersGroups.filter((item) => item !== id),
+    })
+  }
+
+  const handleOptionChange = (option: AccessOption) => {
+    setCurrentState({
+      ...currentState,
+      selectedOption: option,
+    })
   }
 
   const getSelectedItems = () => {
@@ -150,6 +197,16 @@ function App() {
   return (
     <div className={styles.container}>
       <Card className={styles.card}>
+        <div className={styles.optionSelector}>
+          <TabList
+            selectedValue={currentVariant}
+            onTabSelect={(_, data) => setCurrentVariant(data.value as VariantType)}
+          >
+            <Tab value="option1">Option 1: No Group Support</Tab>
+            <Tab value="option2">Option 2: With Group Support</Tab>
+          </TabList>
+        </div>
+
         <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
         <Text className={styles.description}>
@@ -172,7 +229,7 @@ function App() {
 
         <RadioGroup
           value={selectedOption}
-          onChange={(_, data) => setSelectedOption(data.value as AccessOption)}
+          onChange={(_, data) => handleOptionChange(data.value as AccessOption)}
           className={styles.radioGroup}
         >
           <div className={styles.radioItem}>
@@ -190,9 +247,14 @@ function App() {
           </div>
 
           <div className={styles.radioItem}>
-            <Radio value="specific-groups" label="Specific groups or users" />
+            <Radio
+              value="specific-groups"
+              label={currentVariant === 'option1' ? 'Select specific users' : 'Specific groups or users'}
+            />
             <Text className={styles.radioDescription}>
-              Only specified groups and users will automatically receive Frontier features and agents.
+              {currentVariant === 'option1'
+                ? 'Only specified users will automatically receive Frontier features and agents.'
+                : 'Only specified groups and users will automatically receive Frontier features and agents.'}
             </Text>
             {selectedOption === 'specific-groups' && (
               <div className={styles.userGroupSelector}>
