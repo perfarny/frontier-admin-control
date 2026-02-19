@@ -126,7 +126,7 @@ function App() {
   const initialOption: AccessOption = 'no-access'
 
   // State for which variant/option is being viewed
-  const [currentVariant, setCurrentVariant] = useState<VariantType>('option2')
+  const [currentVariant, setCurrentVariant] = useState<VariantType>('option1')
 
   // Separate state for Option 1 (No Group Support)
   const [option1State, setOption1State] = useState<OptionState>({
