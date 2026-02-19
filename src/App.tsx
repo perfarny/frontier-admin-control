@@ -333,7 +333,11 @@ function App() {
         <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
         {/* Show pre-existing warning for Option 4 on initial load */}
-        {currentVariant === 'option4' && initialUsersGroups.length > 3 && !option4WarningDismissed && !option4ValidationError && (
+        {currentVariant === 'option4' &&
+          selectedOption === 'specific-groups' &&
+          initialUsersGroups.length > 3 &&
+          !option4WarningDismissed &&
+          !option4ValidationError && (
           <MessageBar
             intent="warning"
             className={styles.warningBanner}
