@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     minHeight: '100vh',
     backgroundColor: tokens.colorNeutralBackground3,
