@@ -309,24 +309,28 @@ function App() {
             {selectedOption === 'specific-groups' as AccessOption && (
               <div className={styles.userGroupSelector}>
                 <Combobox
+                  multiselect
                   placeholder={currentVariant === 'option1' ? 'Add users' : 'Search for users or groups'}
                   className={styles.combobox}
+                  selectedOptions={selectedUsersGroups}
                   onOptionSelect={(_, data) => {
                     if (data.optionValue) {
-                      handleSelectUserGroup(data.optionValue)
+                      if (data.selectedOptions.includes(data.optionValue)) {
+                        handleSelectUserGroup(data.optionValue)
+                      } else {
+                        handleRemoveUserGroup(data.optionValue)
+                      }
                     }
                   }}
                 >
-                  {mockUsersAndGroups
-                    .filter((item) => !selectedUsersGroups.includes(item.id))
-                    .map((item) => {
-                      const displayText = `${item.name} ${item.type === 'group' ? '(Group)' : item.email ? `(${item.email})` : ''}`
-                      return (
-                        <Option key={item.id} value={item.id} text={displayText}>
-                          {displayText}
-                        </Option>
-                      )
-                    })}
+                  {mockUsersAndGroups.map((item) => {
+                    const displayText = `${item.name} ${item.type === 'group' ? '(Group)' : item.email ? `(${item.email})` : ''}`
+                    return (
+                      <Option key={item.id} value={item.id} text={displayText}>
+                        {displayText}
+                      </Option>
+                    )
+                  })}
                 </Combobox>
                 {selectedUsersGroups.length > 0 && (
                   <TagGroup className={styles.selectedItems}>
