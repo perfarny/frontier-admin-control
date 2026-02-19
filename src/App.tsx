@@ -255,7 +255,7 @@ function App() {
           <div className={styles.radioItem}>
             <Radio
               value="specific-groups"
-              label={currentVariant === 'option1' ? 'Select specific users' : 'Specific groups or users'}
+              label={currentVariant === 'option1' ? 'Specific users' : 'Specific groups or users'}
             />
             <Text className={styles.radioDescription}>
               {currentVariant === 'option1'
@@ -265,7 +265,7 @@ function App() {
             {selectedOption === 'specific-groups' as AccessOption && (
               <div className={styles.userGroupSelector}>
                 <Combobox
-                  placeholder="Search for users or groups"
+                  placeholder={currentVariant === 'option1' ? 'Add users' : 'Search for users or groups'}
                   className={styles.combobox}
                   onOptionSelect={(_, data) => {
                     if (data.optionValue) {
