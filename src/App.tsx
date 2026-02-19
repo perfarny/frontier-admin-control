@@ -346,7 +346,8 @@ function App() {
 
         {/* Show validation error after Save attempt for Options 3 and 4 */}
         {((currentVariant === 'option3' && option3ValidationError) ||
-          (currentVariant === 'option4' && option4ValidationError)) && (
+          (currentVariant === 'option4' && option4ValidationError)) &&
+          selectedOption === 'specific-groups' && (
           <MessageBar
             intent="warning"
             className={styles.warningBanner}
