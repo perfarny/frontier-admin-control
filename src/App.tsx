@@ -126,7 +126,7 @@ const mockUsersAndGroups: UserOrGroup[] = [
   { id: '9', name: 'IT Admins', type: 'group' },
 ]
 
-type VariantType = 'option1' | 'option2' | 'option3' | 'option4'
+type VariantType = 'option1' | 'option2' | 'option3'
 
 interface OptionState {
   selectedOption: AccessOption
@@ -150,7 +150,7 @@ function App() {
     initialUsersGroups: [],
   })
 
-  // Separate state for Option 2 (With Group Support)
+  // Separate state for Option 2 (Group Support with Warnings)
   const [option2State, setOption2State] = useState<OptionState>({
     selectedOption: initialOption,
     selectedUsersGroups: [],
@@ -158,56 +158,46 @@ function App() {
     initialUsersGroups: [],
   })
 
-  // Separate state for Option 3 (Group Support with Warnings)
-  const [option3State, setOption3State] = useState<OptionState>({
-    selectedOption: initialOption,
-    selectedUsersGroups: [],
-    initialSelectedOption: initialOption,
-    initialUsersGroups: [],
-  })
-
-  // Separate state for Option 4 (Pre-exceeded Limit with Warning Banner)
+  // Separate state for Option 3 (Pre-exceeded Limit with Warning Banner)
   // Pre-populate with 5 users to exceed the 3-user limit
-  const [option4State, setOption4State] = useState<OptionState>({
+  const [option3State, setOption3State] = useState<OptionState>({
     selectedOption: 'specific-groups',
     selectedUsersGroups: ['4', '5', '6', '7', '8'], // 5 users pre-selected
     initialSelectedOption: 'specific-groups',
     initialUsersGroups: ['4', '5', '6', '7', '8'],
   })
 
-  // Track if the warning banner has been dismissed for Option 4
-  const [option4WarningDismissed, setOption4WarningDismissed] = useState(false)
+  // Track if the warning banner has been dismissed for Option 3
+  const [option3WarningDismissed, setOption3WarningDismissed] = useState(false)
 
-  // Track validation errors after Save attempt for Options 3 and 4
+  // Track validation errors after Save attempt for Options 2 and 3
+  const [option2ValidationError, setOption2ValidationError] = useState(false)
   const [option3ValidationError, setOption3ValidationError] = useState(false)
-  const [option4ValidationError, setOption4ValidationError] = useState(false)
 
   // Get current state based on selected variant
   const currentState =
     currentVariant === 'option1' ? option1State :
     currentVariant === 'option2' ? option2State :
-    currentVariant === 'option3' ? option3State :
-    option4State
+    option3State
   const setCurrentState =
     currentVariant === 'option1' ? setOption1State :
     currentVariant === 'option2' ? setOption2State :
-    currentVariant === 'option3' ? setOption3State :
-    setOption4State
+    setOption3State
 
   const selectedOption = currentState.selectedOption
   const selectedUsersGroups = currentState.selectedUsersGroups
   const initialSelectedOption = currentState.initialSelectedOption
   const initialUsersGroups = currentState.initialUsersGroups
 
-  // Dismiss the Option 4 warning when user reduces below the limit
+  // Dismiss the Option 3 warning when user reduces below the limit
   useEffect(() => {
-    if (currentVariant === 'option4' &&
+    if (currentVariant === 'option3' &&
         initialUsersGroups.length > 3 &&
         selectedUsersGroups.length <= 3 &&
-        !option4WarningDismissed) {
-      setOption4WarningDismissed(true)
+        !option3WarningDismissed) {
+      setOption3WarningDismissed(true)
     }
-  }, [currentVariant, selectedUsersGroups, initialUsersGroups, option4WarningDismissed])
+  }, [currentVariant, selectedUsersGroups, initialUsersGroups, option3WarningDismissed])
 
   // Check if changes have been made
   const hasChanges = useMemo(() => {
@@ -220,39 +210,39 @@ function App() {
 
   // Clear validation errors when user fixes the issue
   useEffect(() => {
+    if (currentVariant === 'option2' && option2ValidationError) {
+      if (selectedOption !== 'specific-groups' || selectedUsersGroups.length <= 3) {
+        setOption2ValidationError(false)
+      }
+    }
     if (currentVariant === 'option3' && option3ValidationError) {
       if (selectedOption !== 'specific-groups' || selectedUsersGroups.length <= 3) {
         setOption3ValidationError(false)
       }
     }
-    if (currentVariant === 'option4' && option4ValidationError) {
-      if (selectedOption !== 'specific-groups' || selectedUsersGroups.length <= 3) {
-        setOption4ValidationError(false)
-      }
-    }
-  }, [currentVariant, selectedOption, selectedUsersGroups, option3ValidationError, option4ValidationError])
+  }, [currentVariant, selectedOption, selectedUsersGroups, option2ValidationError, option3ValidationError])
 
   // Check if save is allowed
   const canSave = useMemo(() => {
     if (!hasChanges) return false
     // Prevent save if validation error is showing
+    if (currentVariant === 'option2' && option2ValidationError) return false
     if (currentVariant === 'option3' && option3ValidationError) return false
-    if (currentVariant === 'option4' && option4ValidationError) return false
     return true
-  }, [hasChanges, currentVariant, option3ValidationError, option4ValidationError])
+  }, [hasChanges, currentVariant, option2ValidationError, option3ValidationError])
 
   const handleSave = () => {
     console.log('Saving configuration:', { variant: currentVariant, selectedOption, selectedUsersGroups })
 
-    // For Options 3 and 4, validate user count on Save
-    if ((currentVariant === 'option3' || currentVariant === 'option4') &&
+    // For Options 2 and 3, validate user count on Save
+    if ((currentVariant === 'option2' || currentVariant === 'option3') &&
         selectedOption === 'specific-groups' &&
         selectedUsersGroups.length > 3) {
       // Show validation error
-      if (currentVariant === 'option3') {
-        setOption3ValidationError(true)
+      if (currentVariant === 'option2') {
+        setOption2ValidationError(true)
       } else {
-        setOption4ValidationError(true)
+        setOption3ValidationError(true)
       }
       return // Don't save
     }
@@ -310,21 +300,20 @@ function App() {
           onTabSelect={(_, data) => setCurrentVariant(data.value as VariantType)}
         >
           <Tab value="option1">Option 1: No Group Support</Tab>
-          <Tab value="option2">Option 2: With Group Support</Tab>
-          <Tab value="option3">Option 3: Group Support with Warnings</Tab>
-          <Tab value="option4">Option 4: Pre-exceeded Limit</Tab>
+          <Tab value="option2">Option 2: Group Support with Warnings</Tab>
+          <Tab value="option3">Option 3: Pre-exceeded Limit</Tab>
         </TabList>
       </div>
 
       <Card className={styles.card}>
         <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
-        {/* Show pre-existing warning for Option 4 on initial load */}
-        {currentVariant === 'option4' &&
+        {/* Show pre-existing warning for Option 3 on initial load */}
+        {currentVariant === 'option3' &&
           selectedOption === 'specific-groups' &&
           initialUsersGroups.length > 3 &&
-          !option4WarningDismissed &&
-          !option4ValidationError && (
+          !option3WarningDismissed &&
+          !option3ValidationError && (
           <MessageBar
             intent="warning"
             className={styles.warningBanner}
@@ -335,9 +324,9 @@ function App() {
           </MessageBar>
         )}
 
-        {/* Show validation error after Save attempt for Options 3 and 4 */}
-        {((currentVariant === 'option3' && option3ValidationError) ||
-          (currentVariant === 'option4' && option4ValidationError)) &&
+        {/* Show validation error after Save attempt for Options 2 and 3 */}
+        {((currentVariant === 'option2' && option2ValidationError) ||
+          (currentVariant === 'option3' && option3ValidationError)) &&
           selectedOption === 'specific-groups' && (
           <MessageBar
             intent="warning"
@@ -441,19 +430,19 @@ function App() {
                     ))}
                   </TagGroup>
                 )}
-                {(currentVariant === 'option3' || currentVariant === 'option4') && (
+                {(currentVariant === 'option2' || currentVariant === 'option3') && (
                   <Text
                     className={styles.counterText}
                     style={{
-                      color: (currentVariant === 'option3' && option3ValidationError) ||
-                             (currentVariant === 'option4' && (option4ValidationError || (initialUsersGroups.length > 3 && !option4WarningDismissed)))
+                      color: (currentVariant === 'option2' && option2ValidationError) ||
+                             (currentVariant === 'option3' && (option3ValidationError || (initialUsersGroups.length > 3 && !option3WarningDismissed)))
                         ? tokens.colorPaletteRedForeground1
                         : tokens.colorNeutralForeground2
                     }}
                   >
                     (Maximum: 3 users
-                    {((currentVariant === 'option3' && option3ValidationError) ||
-                      (currentVariant === 'option4' && (option4ValidationError || (initialUsersGroups.length > 3 && !option4WarningDismissed)))) &&
+                    {((currentVariant === 'option2' && option2ValidationError) ||
+                      (currentVariant === 'option3' && (option3ValidationError || (initialUsersGroups.length > 3 && !option3WarningDismissed)))) &&
                       ' - Limit Exceeded'}
                     )
                   </Text>
