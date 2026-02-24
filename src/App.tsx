@@ -150,7 +150,7 @@ function App() {
     initialUsersGroups: [],
   })
 
-  // Separate state for Option 2 (Group Support with Warnings)
+  // Separate state for Option 2 (With Group Support)
   const [option2State, setOption2State] = useState<OptionState>({
     selectedOption: initialOption,
     selectedUsersGroups: [],
@@ -208,28 +208,14 @@ function App() {
     return false
   }, [selectedOption, selectedUsersGroups, initialSelectedOption, initialUsersGroups])
 
-  // Clear validation errors when user fixes the issue
-  useEffect(() => {
-    if (currentVariant === 'option2' && option2ValidationError) {
-      if (selectedOption !== 'specific-groups' || selectedUsersGroups.length <= 3) {
-        setOption2ValidationError(false)
-      }
-    }
-    if (currentVariant === 'option3' && option3ValidationError) {
-      if (selectedOption !== 'specific-groups' || selectedUsersGroups.length <= 3) {
-        setOption3ValidationError(false)
-      }
-    }
-  }, [currentVariant, selectedOption, selectedUsersGroups, option2ValidationError, option3ValidationError])
+  // Validation errors are only cleared on Save or Cancel, not automatically
 
   // Check if save is allowed
   const canSave = useMemo(() => {
-    if (!hasChanges) return false
-    // Prevent save if validation error is showing
-    if (currentVariant === 'option2' && option2ValidationError) return false
-    if (currentVariant === 'option3' && option3ValidationError) return false
-    return true
-  }, [hasChanges, currentVariant, option2ValidationError, option3ValidationError])
+    // Save button is enabled whenever there are changes
+    // Validation happens in handleSave, not here
+    return hasChanges
+  }, [hasChanges])
 
   const handleSave = () => {
     console.log('Saving configuration:', { variant: currentVariant, selectedOption, selectedUsersGroups })
@@ -247,6 +233,13 @@ function App() {
       return // Don't save
     }
 
+    // Clear validation errors on successful save
+    if (currentVariant === 'option2') {
+      setOption2ValidationError(false)
+    } else if (currentVariant === 'option3') {
+      setOption3ValidationError(false)
+    }
+
     // Update the initial state to match current state (successful save)
     setCurrentState({
       ...currentState,
@@ -257,6 +250,12 @@ function App() {
 
   const handleCancel = () => {
     console.log('Cancelled')
+    // Clear validation errors on cancel
+    if (currentVariant === 'option2') {
+      setOption2ValidationError(false)
+    } else if (currentVariant === 'option3') {
+      setOption3ValidationError(false)
+    }
     // Reset to the last saved state
     setCurrentState({
       ...currentState,
@@ -300,7 +299,7 @@ function App() {
           onTabSelect={(_, data) => setCurrentVariant(data.value as VariantType)}
         >
           <Tab value="option1">Option 1: No Group Support</Tab>
-          <Tab value="option2">Option 2: Group Support with Warnings</Tab>
+          <Tab value="option2">Option 2: With Group Support</Tab>
           <Tab value="option3">Option 3: Pre-exceeded Limit</Tab>
         </TabList>
       </div>
