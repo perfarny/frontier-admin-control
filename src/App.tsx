@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import {
   Card,
   Text,
@@ -189,16 +189,6 @@ function App() {
   const initialSelectedOption = currentState.initialSelectedOption
   const initialUsersGroups = currentState.initialUsersGroups
 
-  // Dismiss the Option 3 warning when user reduces below the limit
-  useEffect(() => {
-    if (currentVariant === 'option3' &&
-        initialUsersGroups.length > 3 &&
-        selectedUsersGroups.length <= 3 &&
-        !option3WarningDismissed) {
-      setOption3WarningDismissed(true)
-    }
-  }, [currentVariant, selectedUsersGroups, initialUsersGroups, option3WarningDismissed])
-
   // Check if changes have been made
   const hasChanges = useMemo(() => {
     if (selectedOption !== initialSelectedOption) return true
@@ -238,6 +228,7 @@ function App() {
       setOption2ValidationError(false)
     } else if (currentVariant === 'option3') {
       setOption3ValidationError(false)
+      setOption3WarningDismissed(true)
     }
 
     // Update the initial state to match current state (successful save)
