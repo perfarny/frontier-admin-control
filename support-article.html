@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Frontier Access for Your Organization - Microsoft Support</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      color: #201f1e;
+      background: #fff;
+      line-height: 1.6;
+    }
+
+    a { color: #0067b8; text-decoration: none; }
+    a:hover { text-decoration: underline; color: #004578; }
+
+    /* ── Top nav ── */
+    .top-nav {
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 0 24px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .ms-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #201f1e;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .ms-logo svg { display: block; }
+
+    .nav-divider {
+      width: 1px;
+      height: 16px;
+      background: #c8c6c4;
+    }
+
+    .nav-support {
+      font-size: 15px;
+      color: #201f1e;
+      font-weight: 400;
+    }
+
+    .nav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      color: #605e5c;
+    }
+
+    /* ── Breadcrumb ── */
+    .breadcrumb-bar {
+      background: #faf9f8;
+      border-bottom: 1px solid #edebe9;
+      padding: 0 24px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #605e5c;
+      list-style: none;
+    }
+
+    .breadcrumb li + li::before {
+      content: "›";
+      margin-right: 6px;
+      color: #a19f9d;
+    }
+
+    .breadcrumb a { color: #605e5c; }
+    .breadcrumb a:hover { color: #0067b8; }
+    .breadcrumb li:last-child { color: #201f1e; }
+
+    /* ── Page layout ── */
+    .page-wrapper {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* ── Left sidebar ── */
+    .sidebar {
+      padding: 32px 0;
+      position: sticky;
+      top: 48px;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+
+    .sidebar-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #605e5c;
+      padding: 0 0 8px 0;
+      margin-bottom: 4px;
+      border-bottom: 1px solid #edebe9;
+    }
+
+    .sidebar-nav { list-style: none; margin-top: 8px; }
+
+    .sidebar-nav li a {
+      display: block;
+      padding: 5px 12px 5px 0;
+      font-size: 13px;
+      color: #201f1e;
+      border-left: 2px solid transparent;
+      padding-left: 8px;
+      line-height: 1.4;
+    }
+
+    .sidebar-nav li a:hover {
+      color: #0067b8;
+      border-left-color: #0067b8;
+      text-decoration: none;
+    }
+
+    /* ── Main content ── */
+    .main-content {
+      padding: 32px 0 64px;
+      max-width: 720px;
+    }
+
+    /* Article header */
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      color: #605e5c;
+      margin-bottom: 12px;
+    }
+
+    .article-meta .tag {
+      background: #f3f2f1;
+      border-radius: 2px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #605e5c;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #201f1e;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .article-subtitle {
+      font-size: 15px;
+      color: #605e5c;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .article-divider {
+      border: none;
+      border-top: 1px solid #edebe9;
+      margin-bottom: 28px;
+    }
+
+    /* Headings */
+    h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #201f1e;
+      margin: 36px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #edebe9;
+    }
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: #201f1e;
+      margin: 24px 0 8px;
+    }
+
+    /* Body text */
+    p { margin-bottom: 14px; }
+
+    /* Lists */
+    ul, ol {
+      padding-left: 24px;
+      margin-bottom: 14px;
+    }
+
+    li { margin-bottom: 6px; }
+
+    /* Note callout */
+    .note {
+      background: #f0f6ff;
+      border-left: 3px solid #0067b8;
+      padding: 12px 16px;
+      margin: 20px 0;
+      border-radius: 0 2px 2px 0;
+    }
+
+    .note p { margin-bottom: 0; }
+
+    .note-label {
+      font-weight: 600;
+      color: #201f1e;
+      display: inline;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f3f2f1;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      border: 1px solid #edebe9;
+      font-size: 13px;
+    }
+
+    td {
+      padding: 10px 14px;
+      border: 1px solid #edebe9;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td { background: #faf9f8; }
+
+    /* Applies to / feedback strip */
+    .applies-to {
+      font-size: 12px;
+      color: #605e5c;
+      margin-bottom: 24px;
+    }
+
+    .applies-to strong { color: #201f1e; }
+
+    /* Feedback footer */
+    .feedback-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 1px solid #edebe9;
+      font-size: 13px;
+      color: #605e5c;
+    }
+
+    .feedback-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border: 1px solid #c8c6c4;
+      border-radius: 2px;
+      background: #fff;
+      font-size: 13px;
+      font-family: inherit;
+      color: #201f1e;
+      cursor: pointer;
+    }
+
+    .feedback-btn:hover { background: #f3f2f1; border-color: #8a8886; }
+
+    /* Page footer */
+    .page-footer {
+      background: #2b2b2b;
+      color: #ccc;
+      padding: 40px 24px 24px;
+      margin-top: 64px;
+      font-size: 12px;
+    }
+
+    .footer-inner {
+      max-width: 1260px;
+      margin: 0 auto;
+    }
+
+    .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .footer-col h4 {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+      text-transform: none;
+    }
+
+    .footer-col ul { list-style: none; padding: 0; }
+    .footer-col li { margin-bottom: 6px; }
+    .footer-col a { color: #ccc; font-size: 12px; }
+    .footer-col a:hover { color: #fff; text-decoration: underline; }
+
+    .footer-bottom {
+      border-top: 1px solid #444;
+      padding-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-bottom-links { display: flex; gap: 20px; flex-wrap: wrap; }
+    .footer-bottom-links a { color: #ccc; font-size: 12px; }
+    .footer-bottom-links a:hover { color: #fff; text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-wrapper { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .footer-columns { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top nav -->
+  <nav class="top-nav">
+    <a class="ms-logo" href="#">
+      <!-- Microsoft logo grid -->
+      <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+      </svg>
+      Microsoft
+    </a>
+    <div class="nav-divider"></div>
+    <span class="nav-support">Support</span>
+    <div class="nav-right">
+      <a href="#">Sign in</a>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb-bar">
+    <ol class="breadcrumb">
+      <li><a href="#">Microsoft 365</a></li>
+      <li><a href="#">Microsoft 365 Copilot</a></li>
+      <li><a href="#">Frontier</a></li>
+      <li>Manage Frontier Access for Your Organization</li>
+    </ol>
+  </div>
+
+  <div class="page-wrapper">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section-label">In this article</div>
+      <ul class="sidebar-nav">
+        <li><a href="#access-options">Access options</a></li>
+        <li><a href="#selection-limit">The selection limit</a></li>
+        <li><a href="#how-limit-counted">How the limit is counted</a></li>
+        <li><a href="#limit-already-exceeded">When the limit is already exceeded</a></li>
+        <li><a href="#saving-over-limit">Saving changes that exceed the limit</a></li>
+        <li><a href="#save-cancel">Save and Cancel</a></li>
+        <li><a href="#processing-time">Processing time</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main article -->
+    <main class="main-content">
+
+      <div class="article-meta">
+        <span class="tag">Article</span>
+        <span>03/02/2026</span>
+        <span>·</span>
+        <span>5 contributors</span>
+      </div>
+
+      <h1>Manage Frontier Access for Your Organization</h1>
+
+      <p class="article-subtitle">
+        Control which users in your organization automatically receive experimental Microsoft
+        Frontier features and AI agents.
+      </p>
+
+      <div class="applies-to">
+        <strong>Applies to:</strong> Microsoft 365 Copilot
+      </div>
+
+      <hr class="article-divider" />
+
+      <p>
+        The <strong>Frontier Program</strong> gives your organization early, hands-on access to
+        experimental Microsoft features and AI agents. As a Microsoft 365 administrator, you can
+        control exactly which users receive these features automatically using the Frontier
+        Admin Control.
+      </p>
+
+      <!-- Access options -->
+      <h2 id="access-options">Access options</h2>
+
+      <p>
+        The Frontier Admin Control offers three access levels. Select the one that fits your
+        organization's needs and click <strong>Save</strong> to apply.
+      </p>
+
+      <h3>No Access</h3>
+      <p>
+        No users in your organization will receive Frontier features or agents. This is the
+        default state if you have not yet configured access.
+      </p>
+
+      <h3>All Users</h3>
+      <p>
+        Every user in your organization will automatically receive Frontier features and agents.
+        No additional configuration is needed.
+      </p>
+
+      <h3>Specific groups or users</h3>
+      <p>
+        Only the groups and individual users you specify will receive Frontier features. Use
+        this option to run a targeted rollout or pilot program.
+      </p>
+      <p>
+        When this option is selected, a search box appears where you can find and add groups or
+        individual users from your organization's directory. Each selected item appears as a
+        removable tag below the search box. To remove an item, click the <strong>X</strong> on
+        its tag.
+      </p>
+
+      <div class="note">
+        <p><span class="note-label">Note:</span> Users must have a <strong>Microsoft 365 Copilot license</strong>
+        to experience Frontier features, regardless of the access setting configured here.</p>
+      </div>
+
+      <!-- The selection limit -->
+      <h2 id="selection-limit">The selection limit</h2>
+
+      <p>
+        When using <strong>Specific groups or users</strong>, you can add a maximum of
+        <strong>3 groups or users</strong> to the list.
+      </p>
+      <p>
+        A counter below the search box shows your current count relative to the limit:
+      </p>
+      <ul>
+        <li>Within limit: <em>(Maximum: 3 users)</em> — displayed in gray</li>
+        <li>Limit exceeded: <em>(Maximum: 3 users - Limit Exceeded)</em> — displayed in red</li>
+      </ul>
+
+      <!-- How the limit is counted -->
+      <h2 id="how-limit-counted">How the limit is counted</h2>
+
+      <p>
+        The limit applies to the <strong>number of items you add to the list</strong> — each
+        group and each individual user counts as one item, regardless of how many people are in
+        that group or how much those groups overlap.
+      </p>
+      <p>
+        For example, if you add the <strong>Marketing Team</strong> group and the
+        <strong>Engineering Team</strong> group, that counts as <strong>2 items</strong> toward
+        your limit of 3 — even if the same person is a member of both groups. The system does
+        not deduplicate based on the underlying users who will receive access; it counts the
+        objects (groups and individual users) that you have selected.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>What you add</th>
+            <th>Count toward limit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1 group</td><td>1</td></tr>
+          <tr><td>2 groups</td><td>2</td></tr>
+          <tr><td>2 groups + 1 individual user</td><td>3 (at limit)</td></tr>
+          <tr><td>2 groups that share a member</td><td>2 (overlap is not deducted)</td></tr>
+        </tbody>
+      </table>
+
+      <!-- When the limit is already exceeded -->
+      <h2 id="limit-already-exceeded">When the limit is already exceeded</h2>
+
+      <p>
+        If your organization's previously saved configuration contains more than 3 items, you
+        will see a warning banner when you open the control:
+      </p>
+      <div class="note">
+        <p><em>You have exceeded the number of allowed users.</em></p>
+      </div>
+      <p>
+        This warning appears automatically to let you know the current state needs to be
+        resolved. As you remove items from the list, the warning <strong>automatically
+        disappears</strong> once the count reaches 3 or fewer — no additional action is needed.
+      </p>
+
+      <!-- Saving changes that exceed the limit -->
+      <h2 id="saving-over-limit">Saving changes that exceed the limit</h2>
+
+      <p>
+        If you click <strong>Save</strong> while the list contains more than 3 items, the save
+        will be blocked and a warning banner will appear:
+      </p>
+      <div class="note">
+        <p><em>You have exceeded the number of allowed users.</em></p>
+      </div>
+      <p>The counter text will turn red. To complete the save:</p>
+      <ol>
+        <li>Remove items from the list until the count is <strong>3 or fewer</strong>.</li>
+        <li>Click <strong>Save</strong> again.</li>
+      </ol>
+
+      <div class="note">
+        <p>
+          <span class="note-label">Important:</span> Once this warning is triggered by a failed
+          save attempt, it will remain visible even after you reduce the count below the limit.
+          This is expected behavior — the warning clears only when you successfully save or click
+          <strong>Cancel</strong>.
+        </p>
+      </div>
+
+      <!-- Save and Cancel -->
+      <h2 id="save-cancel">Save and Cancel</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Button</th>
+            <th>When it's available</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Save</strong></td>
+            <td>After any unsaved change is made</td>
+            <td>Applies your changes. If the list exceeds 3 items, the save is blocked and a warning appears.</td>
+          </tr>
+          <tr>
+            <td><strong>Cancel</strong></td>
+            <td>After any unsaved change is made</td>
+            <td>Discards all unsaved changes and reverts to the last saved configuration. Also clears any validation warnings.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Both buttons become disabled again after a successful save or after canceling, since
+        there are no pending changes.
+      </p>
+
+      <!-- Processing time -->
+      <h2 id="processing-time">Processing time</h2>
+
+      <p>
+        After saving, changes may take <strong>up to 3 hours</strong> to take effect for
+        your users.
+      </p>
+
+      <!-- Feedback bar -->
+      <div class="feedback-bar">
+        <span>Was this article helpful?</span>
+        <button class="feedback-btn">👍 Yes</button>
+        <button class="feedback-btn">👎 No</button>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <div class="footer-inner">
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h4>What's new</h4>
+          <ul>
+            <li><a href="#">Surface Pro</a></li>
+            <li><a href="#">Surface Laptop</a></li>
+            <li><a href="#">Microsoft Copilot</a></li>
+            <li><a href="#">Microsoft 365</a></li>
+            <li><a href="#">Windows 11 apps</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Microsoft Store</h4>
+          <ul>
+            <li><a href="#">Account profile</a></li>
+            <li><a href="#">Download Center</a></li>
+            <li><a href="#">Microsoft Store support</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Order tracking</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Education</h4>
+          <ul>
+            <li><a href="#">Microsoft in education</a></li>
+            <li><a href="#">Devices for education</a></li>
+            <li><a href="#">Microsoft Teams for Education</a></li>
+            <li><a href="#">Microsoft 365 Education</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Business</h4>
+          <ul>
+            <li><a href="#">Microsoft Cloud</a></li>
+            <li><a href="#">Microsoft Security</a></li>
+            <li><a href="#">Azure</a></li>
+            <li><a href="#">Dynamics 365</a></li>
+            <li><a href="#">Microsoft 365</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Developer & IT</h4>
+          <ul>
+            <li><a href="#">Developer Center</a></li>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Microsoft Learn</a></li>
+            <li><a href="#">Microsoft Tech Community</a></li>
+            <li><a href="#">Azure Marketplace</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© Microsoft 2026</span>
+        <div class="footer-bottom-links">
+          <a href="#">Contact Microsoft</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms of use</a>
+          <a href="#">Trademarks</a>
+          <a href="#">Safety &amp; eco</a>
+          <a href="#">About our ads</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
