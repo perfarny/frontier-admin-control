@@ -309,7 +309,7 @@ function App() {
             className={styles.warningBanner}
           >
             <MessageBarBody>
-              You have exceeded the number of allowed users. <Link>Learn more</Link>
+              You have exceeded the number of allowed users. <Link href="support-article.html" target="_blank" rel="noopener noreferrer">Learn more</Link>
             </MessageBarBody>
           </MessageBar>
         )}
@@ -323,7 +323,7 @@ function App() {
             className={styles.warningBanner}
           >
             <MessageBarBody>
-              You have exceeded the number of allowed users. <Link>Learn more</Link>
+              You have exceeded the number of allowed users. <Link href="support-article.html" target="_blank" rel="noopener noreferrer">Learn more</Link>
             </MessageBarBody>
           </MessageBar>
         )}
