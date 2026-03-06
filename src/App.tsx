@@ -239,11 +239,15 @@ function App() {
       setOption2ValidationError(false)
     }
 
+    // When saving with no-access or all-users, clear the user/group selections
+    const savedUsersGroups = selectedOption === 'specific-groups' ? [...selectedUsersGroups] : []
+
     // Update the initial state to match current state (successful save)
     setCurrentState({
       ...currentState,
+      selectedUsersGroups: savedUsersGroups,
       initialSelectedOption: selectedOption,
-      initialUsersGroups: [...selectedUsersGroups],
+      initialUsersGroups: savedUsersGroups,
     })
   }
 
