@@ -131,6 +131,11 @@ const useStyles = makeStyles({
     paddingTop: '24px',
     borderTop: `1px solid ${tokens.colorNeutralStroke2}`,
   },
+  mcIframe: {
+    width: '100%',
+    minHeight: '600px',
+    border: 'none',
+  },
 })
 
 type AccessOption = 'no-access' | 'all-users' | 'specific-groups'
@@ -155,7 +160,7 @@ const mockUsersAndGroups: UserOrGroup[] = [
   { id: '9', name: 'IT Admins', type: 'group' },
 ]
 
-type VariantType = 'option1' | 'option2'
+type VariantType = 'option1' | 'option2' | 'mcpost'
 
 interface OptionState {
   selectedOption: AccessOption
@@ -302,9 +307,21 @@ function App() {
         >
           <Tab value="option1">Current</Tab>
           <Tab value="option2">vNext</Tab>
+          <Tab value="mcpost">MC Post</Tab>
         </TabList>
       </div>
 
+      {currentVariant === 'mcpost' ? (
+        <Card className={styles.card}>
+          <Title3 className={styles.header}>Message Center Post</Title3>
+          <iframe
+            className={styles.mcIframe}
+            src="https://onedrive.live.com/embed?resid=YOUR_EMBED_ID&authkey=YOUR_AUTH_KEY&em=2"
+            title="Frontier Admin Control - MC Post"
+            allowFullScreen
+          />
+        </Card>
+      ) : (
       <Card className={styles.card}>
         <Title3 className={styles.header}>Turn on Frontier features</Title3>
 
@@ -579,6 +596,7 @@ function App() {
           </Button>
         </div>
       </Card>
+      )}
     </div>
   )
 }
