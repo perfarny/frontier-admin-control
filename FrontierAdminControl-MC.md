@@ -13,19 +13,17 @@ IT Admins
 April 16, 2026
 
 ## Proposed Title
-Frontier Admin Control: unified enrollment, agent governance, and group support
+Frontier Admin Control: unified enrollment and Entra group support
 
 ## Proposed Description
-We are making three changes to the Frontier Admin Control. Frontier enrollment is now unified into a single control across web apps, desktop and mobile apps, and agents. Frontier agents now adhere to the admin control instead of being available to all users by default. Administrators can now assign access to groups in addition to individual users (max 10,000 users).
+We are making two changes to the Frontier Admin Control. Frontier enrollment is now unified into a single control across all apps and platforms, including agents. Administrators can now assign access to Entra groups in addition to individual users.
 
 ## Customer Impact
 - Largely transparent to end users — no action required
-- Users no longer need to separately enroll in the Insider program for desktop/mobile Frontier features
-- Frontier agents will only be available to users granted access through the admin control (previously available to all users)
+- Frontier agents will only be accessible to users assigned access through the admin control (previously these were disconnected from the control)
 
 ## Admin Impact
-- Review existing Frontier Admin Control configuration — it now governs all apps, platforms, and agents
-- Frontier agents no longer roll out to all users by default — only users granted access through this control will receive them
-- Groups can now be assigned in addition to individual users, reducing management overhead
+- Single control now governs Frontier access across web apps, desktop and mobile apps, and agents — no separate enrollment needed
+- Access can now be assigned to Entra groups, not just individual users, reducing management overhead
+- Frontier agents are now governed by this control — review your configuration to ensure intended users have access
 - No action required if current configuration is already set as desired
-- Changes may take up to 3 hours to take effect

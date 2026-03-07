@@ -34,14 +34,14 @@ const doc = new Document({
       // Proposed Title
       new Paragraph({ text: 'Proposed Title', heading: HeadingLevel.HEADING_2, spacing: { before: 300 } }),
       new Paragraph({
-        children: [new TextRun({ text: 'Frontier Admin Control: unified enrollment, agent governance, and group support', bold: true })],
+        children: [new TextRun({ text: 'Frontier Admin Control: unified enrollment and Entra group support', bold: true })],
         spacing: { after: 200 },
       }),
 
       // Proposed Description
       new Paragraph({ text: 'Proposed Description', heading: HeadingLevel.HEADING_2, spacing: { before: 300 } }),
       new Paragraph({
-        text: 'We are making three changes to the Frontier Admin Control. Frontier enrollment is now unified into a single control across web apps, desktop and mobile apps, and agents. Frontier agents now adhere to the admin control instead of being available to all users by default. Administrators can now assign access to groups in addition to individual users (max 10,000 users).',
+        text: 'We are making two changes to the Frontier Admin Control. Frontier enrollment is now unified into a single control across all apps and platforms, including agents. Administrators can now assign access to Entra groups in addition to individual users.',
         spacing: { after: 200 },
       }),
 
@@ -53,11 +53,7 @@ const doc = new Document({
       }),
       new Paragraph({
         bullet: { level: 0 },
-        text: 'Users no longer need to separately enroll in the Insider program for desktop/mobile Frontier features',
-      }),
-      new Paragraph({
-        bullet: { level: 0 },
-        text: 'Frontier agents will only be available to users granted access through the admin control (previously available to all users)',
+        text: 'Frontier agents will only be accessible to users assigned access through the admin control (previously these were disconnected from the control)',
         spacing: { after: 200 },
       }),
 
@@ -65,23 +61,19 @@ const doc = new Document({
       new Paragraph({ text: 'Admin Impact', heading: HeadingLevel.HEADING_2, spacing: { before: 300 } }),
       new Paragraph({
         bullet: { level: 0 },
-        text: 'Review existing Frontier Admin Control configuration — it now governs all apps, platforms, and agents',
+        text: 'Single control now governs Frontier access across web apps, desktop and mobile apps, and agents — no separate enrollment needed',
       }),
       new Paragraph({
         bullet: { level: 0 },
-        text: 'Frontier agents no longer roll out to all users by default — only users granted access through this control will receive them',
+        text: 'Access can now be assigned to Entra groups, not just individual users, reducing management overhead',
       }),
       new Paragraph({
         bullet: { level: 0 },
-        text: 'Groups can now be assigned in addition to individual users, reducing management overhead',
+        text: 'Frontier agents are now governed by this control — review your configuration to ensure intended users have access',
       }),
       new Paragraph({
         bullet: { level: 0 },
         text: 'No action required if current configuration is already set as desired',
-      }),
-      new Paragraph({
-        bullet: { level: 0 },
-        text: 'Changes may take up to 3 hours to take effect',
       }),
     ],
   }],

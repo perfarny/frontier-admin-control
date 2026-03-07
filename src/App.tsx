@@ -334,25 +334,23 @@ function App() {
           <Text style={{ display: 'block', marginBottom: '12px' }}>April 16, 2026</Text>
 
           <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Proposed Title</Text>
-          <Text style={{ display: 'block', marginBottom: '12px' }}>Frontier Admin Control: unified enrollment, agent governance, and group support</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>Frontier Admin Control: unified enrollment and Entra group support</Text>
 
           <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Proposed Description</Text>
-          <Text style={{ display: 'block', marginBottom: '12px' }}>We are making three changes to the Frontier Admin Control. Frontier enrollment is now unified into a single control across web apps, desktop and mobile apps, and agents. Frontier agents now adhere to the admin control instead of being available to all users by default. Administrators can now assign access to groups in addition to individual users (max 10,000 users).</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>We are making two changes to the Frontier Admin Control. Frontier enrollment is now unified into a single control across all apps and platforms, including agents. Administrators can now assign access to Entra groups in addition to individual users.</Text>
 
           <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Customer Impact</Text>
           <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
             <li><Text>Largely transparent to end users — no action required</Text></li>
-            <li><Text>Users no longer need to separately enroll in the Insider program for desktop/mobile Frontier features</Text></li>
-            <li><Text>Frontier agents will only be available to users granted access through the admin control (previously available to all users)</Text></li>
+            <li><Text>Frontier agents will only be accessible to users assigned access through the admin control (previously these were disconnected from the control)</Text></li>
           </ul>
 
           <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Admin Impact</Text>
           <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
-            <li><Text>Review existing Frontier Admin Control configuration — it now governs all apps, platforms, and agents</Text></li>
-            <li><Text>Frontier agents no longer roll out to all users by default — only users granted access through this control will receive them</Text></li>
-            <li><Text>Groups can now be assigned in addition to individual users, reducing management overhead</Text></li>
+            <li><Text>Single control now governs Frontier access across web apps, desktop and mobile apps, and agents — no separate enrollment needed</Text></li>
+            <li><Text>Access can now be assigned to Entra groups, not just individual users, reducing management overhead</Text></li>
+            <li><Text>Frontier agents are now governed by this control — review your configuration to ensure intended users have access</Text></li>
             <li><Text>No action required if current configuration is already set as desired</Text></li>
-            <li><Text>Changes may take up to 3 hours to take effect</Text></li>
           </ul>
         </Card>
       ) : (
