@@ -316,7 +316,7 @@ function App() {
           <Title3 className={styles.header}>Message Center Post</Title3>
           <iframe
             className={styles.mcIframe}
-            src="https://onedrive.live.com/embed?resid=YOUR_EMBED_ID&authkey=YOUR_AUTH_KEY&em=2"
+            src="https://onedrive.cloud.microsoft/:w:/a@e4uf2te7/S/cQqHRITj0rLhRIMuwFEly6fBEgUC-C7wsSXGzPs9M90j4Cr32w?action=embedview"
             title="Frontier Admin Control - MC Post"
             allowFullScreen
           />
