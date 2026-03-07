@@ -65,15 +65,11 @@ const doc = new Document({
       }),
       new Paragraph({
         bullet: { level: 0 },
-        text: 'Access can now be assigned to Entra groups, not just individual users, reducing management overhead',
+        text: 'Access can now be assigned to Entra groups, not just individual users, reducing management overhead. Note, total user assignment (via users and/or within groups) may not exceed 10,000.',
       }),
       new Paragraph({
         bullet: { level: 0 },
-        text: 'Frontier agents are now governed by this control — review your configuration to ensure intended users have access',
-      }),
-      new Paragraph({
-        bullet: { level: 0 },
-        text: 'No action required if current configuration is already set as desired',
+        text: 'Frontier agents are now governed by this control — previously agents were available to all users (pending standard admin agent controls)',
       }),
     ],
   }],

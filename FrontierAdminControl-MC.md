@@ -24,6 +24,5 @@ We are making two changes to the Frontier Admin Control. Frontier enrollment is 
 
 ## Admin Impact
 - Single control now governs Frontier access across web apps, desktop and mobile apps, and agents — no separate enrollment needed
-- Access can now be assigned to Entra groups, not just individual users, reducing management overhead
-- Frontier agents are now governed by this control — review your configuration to ensure intended users have access
-- No action required if current configuration is already set as desired
+- Access can now be assigned to Entra groups, not just individual users, reducing management overhead. Note, total user assignment (via users and/or within groups) may not exceed 10,000.
+- Frontier agents are now governed by this control — previously agents were available to all users (pending standard admin agent controls)
