@@ -316,7 +316,7 @@ function App() {
           <Title3 className={styles.header}>Message Center Post</Title3>
           <Text style={{ marginBottom: '16px', display: 'block' }}>
             For commenting and editing, please open here:{' '}
-            <Link href="https://microsoft-my.sharepoint-df.com/:w:/p/perfarny/cQpV7ASTz766RpxOq_COGXQyEgUC2CRjl9Izzj17eR4yu12Q0w" target="_blank" rel="noopener noreferrer">
+            <Link href="https://microsoft-my.sharepoint-df.com/:w:/p/perfarny/cQqHRITj0rLhRIMuwFEly6fBEgUC-C7wsSXGzPs9M90j4Cr32w" target="_blank" rel="noopener noreferrer">
               Word Document
             </Link>
           </Text>
