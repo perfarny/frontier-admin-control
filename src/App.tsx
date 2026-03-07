@@ -357,7 +357,7 @@ Admin Impact
             </Link>
             {' | '}
             <Link as="button" onClick={handleCopyMcPost} style={{ cursor: 'pointer' }}>
-              {mcPostCopied ? 'Copied!' : 'Copy to clipboard'}
+              {mcPostCopied ? 'Copied!' : 'Copy text to clipboard'}
             </Link>
           </Text>
 
