@@ -314,12 +314,46 @@ function App() {
       {currentVariant === 'mcpost' ? (
         <Card className={styles.card}>
           <Title3 className={styles.header}>Message Center Post</Title3>
-          <iframe
-            className={styles.mcIframe}
-            src="https://microsoft-my.sharepoint-df.com/:w:/p/perfarny/cQpV7ASTz766RpxOq_COGXQyEgUC2CRjl9Izzj17eR4yu12Q0w?action=embedview"
-            title="Frontier Admin Control - MC Post"
-            allowFullScreen
-          />
+          <Text style={{ marginBottom: '16px', display: 'block' }}>
+            For commenting and editing, please open here:{' '}
+            <Link href="https://microsoft-my.sharepoint-df.com/:w:/p/perfarny/cQpV7ASTz766RpxOq_COGXQyEgUC2CRjl9Izzj17eR4yu12Q0w" target="_blank" rel="noopener noreferrer">
+              Word Document
+            </Link>
+          </Text>
+
+          <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Feature Name</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>Frontier Admin Control</Text>
+
+          <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Feature Description</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>The Frontier Admin Control is a setting in the Microsoft 365 Admin Center that allows IT administrators to manage which users in their organization receive access to experimental Frontier features and agents.</Text>
+
+          <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Target Audience</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>IT Admins</Text>
+
+          <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Production Release Date</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>April 16, 2026</Text>
+
+          <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Proposed Title</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>Frontier Admin Control: unified enrollment, agent governance, and group support</Text>
+
+          <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Proposed Description</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>We are making three changes to the Frontier Admin Control. Frontier enrollment is now unified into a single control across web apps, desktop and mobile apps, and agents. Frontier agents now adhere to the admin control instead of being available to all users by default. Administrators can now assign access to groups in addition to individual users (max 10,000 users).</Text>
+
+          <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Customer Impact</Text>
+          <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
+            <li><Text>Largely transparent to end users — no action required</Text></li>
+            <li><Text>Users no longer need to separately enroll in the Insider program for desktop/mobile Frontier features</Text></li>
+            <li><Text>Frontier agents will only be available to users granted access through the admin control (previously available to all users)</Text></li>
+          </ul>
+
+          <Text style={{ fontWeight: 600, fontSize: '14px', display: 'block', marginBottom: '4px' }}>Admin Impact</Text>
+          <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
+            <li><Text>Review existing Frontier Admin Control configuration — it now governs all apps, platforms, and agents</Text></li>
+            <li><Text>Frontier agents no longer roll out to all users by default — only users granted access through this control will receive them</Text></li>
+            <li><Text>Groups can now be assigned in addition to individual users, reducing management overhead</Text></li>
+            <li><Text>No action required if current configuration is already set as desired</Text></li>
+            <li><Text>Changes may take up to 3 hours to take effect</Text></li>
+          </ul>
         </Card>
       ) : (
       <Card className={styles.card}>
