@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import {
   Card,
   Text,
@@ -176,6 +176,40 @@ function App() {
   // State for which variant/option is being viewed
   const [currentVariant, setCurrentVariant] = useState<VariantType>('option1')
 
+  // Copy to clipboard state for MC Post
+  const [mcPostCopied, setMcPostCopied] = useState(false)
+  const handleCopyMcPost = useCallback(() => {
+    const text = `Feature Name
+Frontier Admin Control
+
+Feature Description
+The Frontier Admin Control is a setting in the Microsoft 365 Admin Center that allows IT administrators to manage which users in their organization receive access to experimental Frontier features and agents.
+
+Target Audience
+IT Admins
+
+Production Release Date
+April 16, 2026
+
+Proposed Title
+Frontier Admin Control: unified enrollment and Entra group support
+
+Proposed Description
+We are making two changes to the Frontier Admin Control. Frontier enrollment is now unified into a single control across all apps and platforms, including agents. Administrators can now assign access to Entra groups in addition to individual users.
+
+Customer Impact
+• Largely transparent to end users — no action required
+• Frontier agents will only be accessible to users assigned access through the admin control (previously these were disconnected from the control)
+
+Admin Impact
+• Single control now governs Frontier access across web apps, desktop and mobile apps, and agents — no separate enrollment needed
+• Access can now be assigned to Entra groups, not just individual users, reducing management overhead. Note, total user assignment (via users and/or within groups) may not exceed 10,000.
+• Frontier agents are now governed by this control — previously agents were available to all users (pending standard admin agent controls)`
+    navigator.clipboard.writeText(text)
+    setMcPostCopied(true)
+    setTimeout(() => setMcPostCopied(false), 2000)
+  }, [])
+
   // Separate state for Option 1 (No Group Support)
   const [option1State, setOption1State] = useState<OptionState>({
     selectedOption: initialOption,
@@ -320,6 +354,10 @@ function App() {
             For commenting and editing, please open here:{' '}
             <Link href="https://microsoft-my.sharepoint-df.com/:w:/p/perfarny/cQqHRITj0rLhRIMuwFEly6fBEgUC-C7wsSXGzPs9M90j4Cr32w" target="_blank" rel="noopener noreferrer">
               Word Document
+            </Link>
+            {' | '}
+            <Link as="button" onClick={handleCopyMcPost} style={{ cursor: 'pointer' }}>
+              {mcPostCopied ? 'Copied!' : 'Copy to clipboard'}
             </Link>
           </Text>
 
