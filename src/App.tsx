@@ -412,9 +412,9 @@ Admin Impact
           <Text style={{ fontWeight: 600, fontSize: '16px', display: 'block', marginBottom: '8px' }}>Goals</Text>
           <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
             <li><Text>Provide administrators a self-service UI to manage Frontier feature access</Text></li>
+            <li><Text>Unify Frontier enrollment into a single control across all apps, platforms, and agents</Text></li>
             <li><Text>Support three access tiers: no access, all users, and specific users/groups</Text></li>
-            <li><Text>Enforce a configurable user limit when selecting specific users or groups</Text></li>
-            <li><Text>Deliver multiple UX variants for A/B testing</Text></li>
+            <li><Text>Support assignment via individual users and Entra groups (max 10,000 total users)</Text></li>
             <li><Text>Integrate with Microsoft Entra ID for user and group selection</Text></li>
             <li><Text>Align with M365 Admin Center design patterns using Fluent UI</Text></li>
           </ul>
@@ -428,16 +428,37 @@ Admin Impact
             <li><Text>Role-based access control for administrators (future consideration)</Text></li>
           </ul>
 
+          <Text style={{ fontWeight: 600, fontSize: '16px', display: 'block', marginBottom: '8px' }}>Functional Requirements</Text>
+          <ol style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
+            <li><Text>Three access tiers via radio buttons: No access, All users, and Specific groups or users.</Text></li>
+            <li><Text>Default state for new tenants is No access.</Text></li>
+            <li><Text>When "Specific groups or users" is selected, a combobox appears for searching and selecting Entra users and groups.</Text></li>
+            <li><Text>Total user assignment (via individual users and/or members within groups) may not exceed 10,000.</Text></li>
+            <li><Text>Selected users and groups are displayed as dismissible tags.</Text></li>
+            <li><Text>Validation is performed on save only, not in real-time.</Text></li>
+            <li><Text>Over-limit save attempts show a warning banner; save does not persist.</Text></li>
+            <li><Text>Validation errors persist until successful Save or Cancel.</Text></li>
+            <li><Text>Successful save updates the baseline. No access / All users tiers discard selected users/groups.</Text></li>
+            <li><Text>Cancel reverts to last saved state and clears validation errors.</Text></li>
+            <li><Text>Save and Cancel buttons are disabled when no unsaved changes exist.</Text></li>
+            <li><Text>Changes may take up to 3 hours to process.</Text></li>
+            <li><Text>Users must have a M365 Copilot license to experience Frontier.</Text></li>
+            <li><Text>The control governs Frontier access across web apps, desktop/mobile apps, and agents — unified enrollment.</Text></li>
+            <li><Text>Frontier agents are governed by this control (previously available to all users independently).</Text></li>
+          </ol>
+
           <Text style={{ fontWeight: 600, fontSize: '16px', display: 'block', marginBottom: '8px' }}>User Stories</Text>
           <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
             <li><Text>As an M365 administrator, I want to disable Frontier features for all users so that my organization does not receive experimental features.</Text></li>
             <li><Text>As an M365 administrator, I want to enable Frontier features for all users so that everyone can access experimental features and agents.</Text></li>
-            <li><Text>As an M365 administrator, I want to select specific users or groups to receive Frontier features so that I can pilot with a controlled set of users.</Text></li>
+            <li><Text>As an M365 administrator, I want to select specific users or Entra groups to receive Frontier features so that I can pilot with a controlled set of users.</Text></li>
             <li><Text>As an M365 administrator, I want to see a warning when I exceed the allowed user limit so that I understand my configuration cannot be saved until corrected.</Text></li>
+            <li><Text>As an M365 administrator, I want to cancel my unsaved changes so that I can revert to the last saved configuration without risk.</Text></li>
+            <li><Text>As an M365 administrator, I want the system to validate on save so that I am only blocked when submitting an invalid configuration.</Text></li>
           </ul>
 
           <Text style={{ fontWeight: 600, fontSize: '16px', display: 'block', marginBottom: '8px' }}>Proposed Solution</Text>
-          <Text style={{ display: 'block', marginBottom: '12px' }}>A React-based admin control panel embedded in the M365 Admin Center that provides a card-based UI for managing Frontier access. The solution implements multiple UX variants (tabs) to support A/B testing of different approaches to user/group selection and limit enforcement.</Text>
+          <Text style={{ display: 'block', marginBottom: '12px' }}>A React-based admin control panel embedded in the M365 Admin Center. The prototype implements two UX variants: Current (existing production UX with inner tabs) and vNext (unified control governing all apps, platforms, and agents with Entra group support).</Text>
 
           <Text style={{ fontWeight: 600, fontSize: '16px', display: 'block', marginBottom: '8px' }}>Technical Approach</Text>
           <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
@@ -449,17 +470,17 @@ Admin Impact
 
           <Text style={{ fontWeight: 600, fontSize: '16px', display: 'block', marginBottom: '8px' }}>Risks and Mitigations</Text>
           <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
-            <li><Text>3-user limit too restrictive for large organizations — design for configurable limits</Text></li>
-            <li><Text>Mock Entra data doesn't represent real-world scale — plan for real Entra ID integration</Text></li>
-            <li><Text>3-hour processing delay causes admin frustration — clear messaging in UI about processing time</Text></li>
+            <li><Text>10,000-user limit too restrictive for large organizations — design for configurable limits</Text></li>
+            <li><Text>3-hour processing delay causes admin frustration — clear messaging in UI</Text></li>
+            <li><Text>Entra group membership resolution at scale — plan for server-side resolution with caching</Text></li>
           </ul>
 
           <Text style={{ fontWeight: 600, fontSize: '16px', display: 'block', marginBottom: '8px' }}>Open Questions</Text>
           <ul style={{ margin: '0 0 12px 0', paddingLeft: '20px' }}>
-            <li><Text>Which UX variant will be selected for production deployment?</Text></li>
-            <li><Text>Will the user limit be configurable per tenant, or remain fixed?</Text></li>
+            <li><Text>Will the 10,000-user limit be configurable per tenant, or remain fixed?</Text></li>
             <li><Text>What is the integration path to replace mock data with real Entra ID lookups?</Text></li>
             <li><Text>Is role-based access control needed for which admins can modify Frontier settings?</Text></li>
+            <li><Text>Should configuration changes trigger notifications to affected users?</Text></li>
           </ul>
         </Card>
         )
